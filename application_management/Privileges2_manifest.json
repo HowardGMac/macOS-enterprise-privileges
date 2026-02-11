@@ -4,8 +4,8 @@
    "title": "Configure Privileges (corp.sap.privileges) with…", 
    "__preferencedomain": "corp.sap.privileges", 
    "__feedback": "https://github.com/SAP/macOS-enterprise-privileges/issues", 
-   "__version": "2.5.0.0", 
-   "__copyright": "© 2016-2025 SAP SE. All rights reserved.", 
+   "__version": "2.5.1.0", 
+   "__copyright": "© 2016-2026 SAP SE. All rights reserved.", 
    "type": "object", 
    "options": { 
       "remove_empty_properties": true, 
@@ -153,6 +153,9 @@
             "RevokeAtLoginExcludedUsers": { 
                "$ref": "#/definitions/RevokeAtLoginExcludedUsers" 
             }, 
+            "RevokePrivilegesOnScreenLock": {
+               "$ref": "#/definitions/RevokePrivilegesOnScreenLock"
+            },
             "ShowInMenuBar": { 
                "$ref": "#/definitions/ShowInMenuBar" 
             } ,
@@ -277,6 +280,9 @@
             "RevokeAtLoginExcludedUsers": { 
                "$ref": "#/definitions/RevokeAtLoginExcludedUsers" 
             }, 
+            "RevokePrivilegesOnScreenLock": {
+               "$ref": "#/definitions/RevokePrivilegesOnScreenLock"
+            },
             "ShowInMenuBar": { 
                "$ref": "#/definitions/ShowInMenuBar" 
             } ,
@@ -1851,6 +1857,18 @@
             } 
          ] 
       }, 
+      "RevokePrivilegesOnScreenLock": {
+         "type": "boolean",
+         "default": false,
+         "title": "Revoke Privileges On Screen Lock",
+         "description": "When set to true, the user's administrator privileges are revoked whenever the screen is locked.",
+         "links": [
+            {
+               "rel": "Official documentation",
+               "href": "https://github.com/SAP/macOS-enterprise-privileges/wiki/Managing-Privileges#RevokePrivilegesOnScreenLock"
+            }
+         ]
+      },
       "ShowInMenuBar": { 
          "type": "boolean", 
          "default": false, 
