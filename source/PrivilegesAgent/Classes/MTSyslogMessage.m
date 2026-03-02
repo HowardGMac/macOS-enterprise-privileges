@@ -1,6 +1,6 @@
 /*
     MTSyslogMessage.m
-    Copyright 2020-2025 SAP SE
+    Copyright 2016-2026 SAP SE
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -113,7 +113,7 @@
     if ([returnValue length] == 0) {
         
         // if no name has been specified, we try to get the local name
-        returnValue = (NSString*)CFBridgingRelease(SCDynamicStoreCopyComputerName(NULL, NULL));
+        returnValue = (NSString*)CFBridgingRelease(SCDynamicStoreCopyLocalHostName(NULL));
         
         // if this didn't work, we use the first local ip address we find
         if ([returnValue length] == 0) {

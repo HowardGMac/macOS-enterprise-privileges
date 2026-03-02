@@ -1,6 +1,6 @@
 /*
     MTPrivileges.m
-    Copyright 2016-2025 SAP SE
+    Copyright 2016-2026 SAP SE
      
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -265,7 +265,7 @@
     return ([_userDefaults objectIsForcedForKey:kMTDefaultsAuthRequiredKey] && [_userDefaults boolForKey:kMTDefaultsAuthRequiredKey]);
 }
 
-- (BOOL)privilegesShouldBeRevokedAtLogin
+- (BOOL)revokePrivilegesAtLogin
 {
     BOOL remove = NO;
     
@@ -282,10 +282,17 @@
     return (remove && ![[self currentUser] isExcludedFromRevokeAtLogin]);
 }
 
-- (BOOL)privilegesShouldBeRevokedAfterSystemTimeChange
+- (BOOL)revokePrivilegesOnSystemTimeChange
 {
     return ([_userDefaults objectIsForcedForKey:kMTDefaultsRevokeAfterSystemTimeChangeKey] &&
             [_userDefaults boolForKey:kMTDefaultsRevokeAfterSystemTimeChangeKey]
+            );
+}
+
+- (BOOL)revokePrivilegesOnScreenLock
+{
+    return ([_userDefaults objectIsForcedForKey:kMTDefaultsRevokeOnScreenLockKey] &&
+            [_userDefaults boolForKey:kMTDefaultsRevokeOnScreenLockKey]
             );
 }
 
@@ -323,12 +330,12 @@
     return type;
 }
 
-- (void)setPrivilegesShouldBeRevokedAtLogin:(BOOL)revoke
+- (void)setRevokePrivilegesAtLogin:(BOOL)revoke
 {
     [_appGroupDefaults setBool:revoke forKey:kMTDefaultsRevokeAtLoginKey];
 }
 
-- (BOOL)privilegesShouldBeRevokedAtLoginIsForced
+- (BOOL)revokePrivilegesAtLoginIsForced
 {
     return ([_userDefaults objectIsForcedForKey:kMTDefaultsRevokeAtLoginKey] || [[self currentUser] isExcludedFromRevokeAtLogin]);
 }

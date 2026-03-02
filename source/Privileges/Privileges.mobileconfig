@@ -2,7 +2,7 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 
 <!--
-    Copyright 2019-2025 SAP SE
+    Copyright 2016-2026 SAP SE
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -305,6 +305,16 @@
                                     feature offers no protection against users misusing their admin rights.
                                 -->
                                 <key>RevokePrivilegesAfterSystemTimeChange</key>
+                                <true/>
+                                
+                                <!--
+                                    key:    RevokePrivilegesOnScreenLock
+                                    value:  a boolean
+                                    
+                                    When set to true, the user's administrator privileges are revoked
+                                    whenever the screen is locked.
+                                -->
+                                <key>RevokePrivilegesOnScreenLock</key>
                                 <true/>
                                 
                                 <!--

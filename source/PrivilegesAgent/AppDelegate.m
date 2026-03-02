@@ -1,6 +1,6 @@
 /*
     AppDelegate.m
-    Copyright 2016-2025 SAP SE
+    Copyright 2016-2026 SAP SE
      
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -49,6 +49,7 @@
 @property (nonatomic, strong, readwrite) MTRemoteLoggingManager *logManager;
 @property (atomic, strong, readwrite) NSXPCListener *listener;
 @property (retain) id adminGroupObserver;
+@property (retain) id lockScreenObserver;
 @property (assign) BOOL observingStatusItem;
 @property (assign) BOOL adminRightsExpected;
 @property (assign) BOOL ignoreAdminGroupChanges;
@@ -106,7 +107,7 @@ OSStatus SecTaskValidateForRequirement(SecTaskRef task, CFStringRef requirement)
         } else if (_adminRightsExpected) {
             
             // revoke administrator privileges if needed
-            if ([_privilegesApp privilegesShouldBeRevokedAtLogin] &&
+            if ([_privilegesApp revokePrivilegesAtLogin] &&
                 [[NSDate date] timeIntervalSinceDate:[MTSystemInfo sessionStartDate]] < kMTRevokeAtLoginThreshold) {
                 
                 [self revokeAdminRightsWithCompletionHandler:^(BOOL success) {
@@ -203,6 +204,21 @@ OSStatus SecTaskValidateForRequirement(SecTaskRef task, CFStringRef requirement)
                                                      name:NSSystemClockDidChangeNotification
                                                    object:nil
         ];
+        
+        // add an observer to detect screen locks
+        _lockScreenObserver = [[NSDistributedNotificationCenter defaultCenter] addObserverForName:kMTNotificationNameScreenIsLocked
+                                                                                           object:nil
+                                                                                            queue:nil
+                                                                                       usingBlock:^(NSNotification *notification) {
+            
+            if ([self userHasAdminPrivileges] && [self->_privilegesApp revokePrivilegesOnScreenLock]) {
+                
+                os_log(OS_LOG_DEFAULT, "SAPCorp: Revoking administrator privileges for user %{public}@ because the screen has been locked", [[self->_privilegesApp currentUser] userName]);
+                
+                // remove admin rights
+                [self revokeAdminRightsWithCompletionHandler:^(BOOL success) { return; }];
+            }
+        }];
         
 #pragma mark - check for unexpected permission changes
         
@@ -533,7 +549,7 @@ OSStatus SecTaskValidateForRequirement(SecTaskRef task, CFStringRef requirement)
             // create the syslog message
             NSString *logMessage = nil;
             
-            if ([[self->_privilegesApp currentUser] hasAdminPrivileges]) {
+            if ([self userHasAdminPrivileges]) {
                 
                 logMessage = [NSString stringWithFormat:@"SAPCorp: User %@ now has administrator privileges", [[self->_privilegesApp currentUser] userName]];
                 if ([reason length] > 0) { logMessage = [logMessage stringByAppendingFormat:@" for the following reason: \"%@\"", reason]; }
@@ -549,7 +565,7 @@ OSStatus SecTaskValidateForRequirement(SecTaskRef task, CFStringRef requirement)
             [syslogMessage setFacility:[syslogOptions logFacility]];
             [syslogMessage setSeverity:[syslogOptions logSeverity]];
             [syslogMessage setAppName:kMTAppName];
-            [syslogMessage setMessageID:([[_privilegesApp currentUser] hasAdminPrivileges]) ? @"PRIV_A" : @"PRIV_S"];
+            [syslogMessage setMessageID:([self userHasAdminPrivileges]) ? @"PRIV_A" : @"PRIV_S"];
             [syslogMessage setMaxSize:[syslogOptions maxSize]];
             [syslogMessage setEventMessage:logMessage];
             
@@ -734,6 +750,14 @@ OSStatus SecTaskValidateForRequirement(SecTaskRef task, CFStringRef requirement)
     }
 }
 
+- (void)dealloc
+{
+    [[NSDistributedNotificationCenter defaultCenter] removeObserver:_lockScreenObserver];
+    [[NSDistributedNotificationCenter defaultCenter] removeObserver:_adminGroupObserver];
+    _lockScreenObserver = nil;
+    _adminGroupObserver = nil;
+}
+
 #pragma mark - AppleScriptDataProvider
 
 - (NSUInteger)privilegesTimeLeft
@@ -891,7 +915,7 @@ OSStatus SecTaskValidateForRequirement(SecTaskRef task, CFStringRef requirement)
 
 - (void)updateImageForStatusItem
 {
-    NSString *iconName = ([[_privilegesApp currentUser] hasAdminPrivileges]) ? @"unlocked" : @"locked";
+    NSString *iconName = ([self userHasAdminPrivileges]) ? @"unlocked" : @"locked";
     if ([[_privilegesApp currentUser] useIsRestricted]) { iconName = [iconName stringByAppendingString:@"_managed"]; }
     [[_statusItem button] setImage:[NSImage imageNamed:iconName]];
 }
@@ -1080,10 +1104,10 @@ OSStatus SecTaskValidateForRequirement(SecTaskRef task, CFStringRef requirement)
 
 - (void)systemTimeChanged:(NSNotification*)notification
 {
-    if ([[_privilegesApp currentUser] hasAdminPrivileges] &&
-        [_privilegesApp privilegesShouldBeRevokedAfterSystemTimeChange]) {
+    if ([self userHasAdminPrivileges] &&
+        [_privilegesApp revokePrivilegesOnSystemTimeChange]) {
         
-        os_log(OS_LOG_DEFAULT, "SAPCorp: Revoking administrator privileges because system time changed");
+        os_log(OS_LOG_DEFAULT, "SAPCorp: Revoking administrator privileges for user %{public}@ because system time changed", [[self->_privilegesApp currentUser] userName]);
         
         // remove admin rights
         [self revokeAdminRightsWithCompletionHandler:^(BOOL success) { return; }];

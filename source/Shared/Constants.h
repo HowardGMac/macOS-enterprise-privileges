@@ -1,6 +1,6 @@
 /*
     Constants.h
-    Copyright 2016-2025 SAP SE
+    Copyright 2016-2026 SAP SE
      
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -88,6 +88,7 @@
 #define kMTDefaultsHideOtherWindowsKey              @"HideOtherWindows"
 #define kMTDefaultsRevokeAtLoginKey                 @"RevokePrivilegesAtLogin"
 #define kMTDefaultsRevokeAfterSystemTimeChangeKey   @"RevokePrivilegesAfterSystemTimeChange"
+#define kMTDefaultsRevokeOnScreenLockKey            @"RevokePrivilegesOnScreenLock"
 #define kMTDefaultsRevokeAtLoginExcludedUsersKey    @"RevokeAtLoginExcludedUsers"
 #define kMTDefaultsPostChangeExecutablePathKey      @"PostChangeExecutablePath"
 #define kMTDefaultsPostChangeActionOnGrantOnlyKey   @"PostChangeActionOnGrantOnly"
@@ -122,6 +123,7 @@
 #define kMTNotificationCategoryIdentifier           @"corp.sap.privileges.action"
 #define kMTNotificationActionIdentifierRenew        @"corp.sap.privileges.action.renew"
 #define kMTNotificationNameAdminGroupDidChange      @"corp.sap.privileges.AdminGroupDidChange"
+#define kMTNotificationNameScreenIsLocked           @"com.apple.screenIsLocked"
 
 // NSNotification user info keys
 #define kMTNotificationKeyTimeLeft                  @"TimeLeft"

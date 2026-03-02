@@ -1,6 +1,6 @@
 /*
     MTPrivileges.h
-    Copyright 2016-2025 SAP SE
+    Copyright 2016-2026 SAP SE
      
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -176,32 +176,39 @@
 - (MTBiometricsFallbackType)biometricsFallbackType;
 
 /*!
- @method        privilegesShouldBeRevokedAtLogin
+ @method        revokePrivilegesAtLogin
  @abstract      Get whether admin privileges should be revoked at login.
  @discussion    Returns YES if admin privileges should be revoked at login, otherwise returns NO.
  */
-- (BOOL)privilegesShouldBeRevokedAtLogin;
+- (BOOL)revokePrivilegesAtLogin;
 
 /*!
- @method        privilegesShouldBeRevokedAtLoginIsForced
+ @method        revokePrivilegesAtLoginIsForced
  @abstract      Get whether the privilege removal at login has been forced.
  @discussion    Returns YES if the setting was forced by a configuration profile, otherwise returns NO.
  */
-- (BOOL)privilegesShouldBeRevokedAtLoginIsForced;
+- (BOOL)revokePrivilegesAtLoginIsForced;
 
 /*!
- @method        setPrivilegesShouldBeRevokedAtLogin:
+ @method        setRevokePrivilegesAtLogin:
  @abstract      Set whether admin privileges should be revoked at login.
  @param         revoke A boolean indicating if administrator privileges should be removed at login (YES) or not (NO).
  */
-- (void)setPrivilegesShouldBeRevokedAtLogin:(BOOL)revoke;
+- (void)setRevokePrivilegesAtLogin:(BOOL)revoke;
 
 /*!
- @method        privilegesShouldBeRevokedAfterSystemTimeChange
+ @method        revokePrivilegesOnSystemTimeChange
  @abstract      Get whether admin privileges should be revoked if system time did change.
  @discussion    Returns YES if admin privileges should be revoked if the system time did change, otherwise returns NO.
  */
-- (BOOL)privilegesShouldBeRevokedAfterSystemTimeChange;
+- (BOOL)revokePrivilegesOnSystemTimeChange;
+
+/*!
+ @method        revokePrivilegesOnScreenLock
+ @abstract      Get whether admin privileges should be revoked if the screen has been locked.
+ @discussion    Returns YES if admin privileges should be revoked if the screen has been locked, otherwise returns NO.
+ */
+- (BOOL)revokePrivilegesOnScreenLock;
 
 /*!
  @method        hideOtherWindows

@@ -1,6 +1,6 @@
 /*
     MTSettingsPrivilegesController.m
-    Copyright 2016-2025 SAP SE
+    Copyright 2016-2026 SAP SE
      
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -181,8 +181,8 @@
 - (void)setLoginItemCheckbox
 {
     [self willChangeValueForKey:@"revokeAtLoginIsForced"];
-    [_removeAtLoginButton setState:([_privilegesApp privilegesShouldBeRevokedAtLogin]) ? NSControlStateValueOn : NSControlStateValueOff];
-    [_removeAtLoginButton setEnabled:![_privilegesApp privilegesShouldBeRevokedAtLoginIsForced]];
+    [_removeAtLoginButton setState:([_privilegesApp revokePrivilegesAtLogin]) ? NSControlStateValueOn : NSControlStateValueOff];
+    [_removeAtLoginButton setEnabled:![_privilegesApp revokePrivilegesAtLoginIsForced]];
     [self didChangeValueForKey:@"revokeAtLoginIsForced"];
 }
 
@@ -209,7 +209,7 @@
         
         if ([itemImage isValid]) {
             
-            // reszize the image to 16x16 pixels
+            // resize the image to 16x16 pixels
             NSImageRep *imageRep = [itemImage bestRepresentationForRect:NSMakeRect(0, 0, 16, 16) context:nil hints:nil];
             itemImage = [[NSImage alloc] initWithSize:[imageRep size]];
             [itemImage addRepresentation:imageRep];
@@ -217,14 +217,15 @@
         
         // add the item…
         NSMenuItem *executableItem = [[NSMenuItem alloc] initWithTitle:itemTitle
-                                                                action:nil keyEquivalent:@""
+                                                                action:nil 
+                                                         keyEquivalent:@""
         ];
         [executableItem setImage:itemImage];
         [executableItem setTag:755];
-        [[self->_postExecutableMenu menu] insertItem:executableItem atIndex:2];
+        [[_postExecutableMenu menu] insertItem:executableItem atIndex:2];
         
         // …and select it
-        [self->_postExecutableMenu selectItemAtIndex:2];
+        [_postExecutableMenu selectItemAtIndex:2];
         
     } else {
         
@@ -270,7 +271,7 @@
 
 - (BOOL)revokeAtLoginIsForced
 {
-    return [_privilegesApp privilegesShouldBeRevokedAtLoginIsForced];
+    return [_privilegesApp revokePrivilegesAtLoginIsForced];
 }
 
 - (BOOL)executablePathIsForced
@@ -299,7 +300,7 @@
 
 - (IBAction)setLoginItem:(id)sender
 {
-    [_privilegesApp setPrivilegesShouldBeRevokedAtLogin:([(NSButton*)sender state] == NSControlStateValueOn)];
+    [_privilegesApp setRevokePrivilegesAtLogin:([(NSButton*)sender state] == NSControlStateValueOn)];
 }
 
 - (IBAction)selectExecutable:(id)sender
@@ -354,6 +355,14 @@
                 });
                 
             }];
+            
+        } else {
+            
+            if ([[self->_postExecutableMenu menu] itemWithTag:755]) {
+                [self->_postExecutableMenu selectItemWithTag:755];
+            } else {
+                [self->_postExecutableMenu selectItemAtIndex:0];
+            }
         }
     }];
 }
