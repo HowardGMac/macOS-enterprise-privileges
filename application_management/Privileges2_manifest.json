@@ -4,7 +4,7 @@
    "title": "Configure Privileges (corp.sap.privileges) with…", 
    "__preferencedomain": "corp.sap.privileges", 
    "__feedback": "https://github.com/SAP/macOS-enterprise-privileges/issues", 
-   "__version": "2.5.1.0", 
+   "__version": "2.5.2.0", 
    "__copyright": "© 2016-2026 SAP SE. All rights reserved.", 
    "type": "object", 
    "options": { 
@@ -144,8 +144,14 @@
             "BiometricsFallbackType": {
                "$ref": "#/definitions/BiometricsFallbackType"
             },
+            "AutomaticRevocationExcludedUsers": {
+               "$ref": "#/definitions/AutomaticRevocationExcludedUsers"
+            },
             "RevokePrivilegesAfterSystemTimeChange": {
                "$ref": "#/definitions/RevokePrivilegesAfterSystemTimeChange"
+            },
+            "RevokeAfterTimeChangeExcludedUsers": {
+               "$ref": "#/definitions/RevokeAfterTimeChangeExcludedUsers"
             },
             "RevokePrivilegesAtLogin": { 
                "$ref": "#/definitions/RevokePrivilegesAtLogin" 
@@ -155,6 +161,9 @@
             }, 
             "RevokePrivilegesOnScreenLock": {
                "$ref": "#/definitions/RevokePrivilegesOnScreenLock"
+            },
+            "RevokeOnScreenLockExcludedUsers": {
+               "$ref": "#/definitions/RevokeOnScreenLockExcludedUsers"
             },
             "ShowInMenuBar": { 
                "$ref": "#/definitions/ShowInMenuBar" 
@@ -271,8 +280,14 @@
             "BiometricsFallbackType": {
                "$ref": "#/definitions/BiometricsFallbackType"
             },
+            "AutomaticRevocationExcludedUsers": {
+               "$ref": "#/definitions/AutomaticRevocationExcludedUsers"
+            },
             "RevokePrivilegesAfterSystemTimeChange": {
                "$ref": "#/definitions/RevokePrivilegesAfterSystemTimeChange"
+            },
+            "RevokeAfterTimeChangeExcludedUsers": {
+               "$ref": "#/definitions/RevokeAfterTimeChangeExcludedUsers"
             },
             "RevokePrivilegesAtLogin": { 
                "$ref": "#/definitions/RevokePrivilegesAtLogin" 
@@ -282,6 +297,9 @@
             }, 
             "RevokePrivilegesOnScreenLock": {
                "$ref": "#/definitions/RevokePrivilegesOnScreenLock"
+            },
+            "RevokeOnScreenLockExcludedUsers": {
+               "$ref": "#/definitions/RevokeOnScreenLockExcludedUsers"
             },
             "ShowInMenuBar": { 
                "$ref": "#/definitions/ShowInMenuBar" 
@@ -470,6 +488,33 @@
             } 
          ] 
       }, 
+      "AutomaticRevocationExcludedUsers": {
+         "type": "array",
+         "title": "Automatic Revocation Excluded Users",
+         "description": "The specified users are excluded from any automatic revocation. This key is evaluated before the keys RevokeAtLoginExcludedUsers, RevokeAfterTimeChangeExcludedUsers, RevokeOnScreenLockExcludedUsers, and any other automatic revocation key that may be introduced in the future. If a user is listed in the AutomaticRevocationExcludedUsers key, the other keys are not evaluated. When used with a client management system that supports variables in configuration profiles, variables such as $USERNAME can be used here.",
+         "links": [
+            {
+               "rel": "Official documentation",
+               "href": "https://github.com/SAP/macOS-enterprise-privileges/wiki/Managing-Privileges#AutomaticRevocationExcludedUsers"
+            }
+         ],
+         "items": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_-]{1,64}$",
+            "title": "User",
+            "options": {
+               "inputAttributes": {
+                  "placeholder": "admin"
+               },
+               "infoText": "Please enter a user's short name.",
+               "error_messages": {
+                  "en": {
+                     "error_pattern": "Please enter a valid user name"
+                  }
+               }
+            }
+         }
+      },
       "BiometricsFallbackType": {
          "type": "integer",
          "default": 0,
@@ -1801,6 +1846,38 @@
             }
          }
       },
+      "RevokeAfterTimeChangeExcludedUsers": {
+         "type": "array",
+         "title": "Revoke After Time Change Excluded Users",
+         "description": "If RevokePrivilegesAfterSystemTimeChange is set to true, the specified users are excluded from privilege revocation after system time did change. When used with a client management system that supports variables in configuration profiles, variables such as $USERNAME can be used here.",
+         "links": [
+            {
+               "rel": "Official documentation",
+               "href": "https://github.com/SAP/macOS-enterprise-privileges/wiki/Managing-Privileges#RevokeAfterTimeChangeExcludedUsers"
+            }
+         ],
+         "options": {
+            "dependencies": {
+               "RevokePrivilegesAfterSystemTimeChange": true
+            }
+         },
+         "items": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_-]{1,64}$",
+            "title": "User",
+            "options": {
+               "inputAttributes": {
+                  "placeholder": "admin"
+               },
+               "infoText": "Please enter a user's short name.",
+               "error_messages": {
+                  "en": {
+                     "error_pattern": "Please enter a valid user name"
+                  }
+               }
+            }
+         }
+      },
       "RevokeAtLoginExcludedUsers": { 
          "type": "array", 
          "title": "Revoke At Login Excluded Users", 
@@ -1833,6 +1910,38 @@
             } 
          } 
       }, 
+      "RevokeOnScreenLockExcludedUsers": {
+         "type": "array",
+         "title": "Revoke On Screen Lock Excluded Users",
+         "description": "If RevokePrivilegesOnScreenLock is set to true, the specified users are excluded from privilege revocation on screen lock. When used with a client management system that supports variables in configuration profiles, variables such as $USERNAME can be used here.",
+         "links": [
+            {
+               "rel": "Official documentation",
+               "href": "https://github.com/SAP/macOS-enterprise-privileges/wiki/Managing-Privileges#RevokeOnScreenLockExcludedUsers"
+            }
+         ],
+         "options": {
+            "dependencies": {
+               "RevokePrivilegesOnScreenLock": true
+            }
+         },
+         "items": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_-]{1,64}$",
+            "title": "User",
+            "options": {
+               "inputAttributes": {
+                  "placeholder": "admin"
+               },
+               "infoText": "Please enter a user's short name.",
+               "error_messages": {
+                  "en": {
+                     "error_pattern": "Please enter a valid user name"
+                  }
+               }
+            }
+         }
+      },
       "RevokePrivilegesAfterSystemTimeChange": {
          "type": "boolean",
          "default": false,
