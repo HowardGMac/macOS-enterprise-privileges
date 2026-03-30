@@ -150,6 +150,7 @@ OSStatus SecTaskValidateForRequirement(SecTaskRef task, CFStringRef requirement)
                               kMTDefaultsHideOtherWindowsKey,
                               kMTDefaultsRevokeAtLoginKey,
                               kMTDefaultsRevokeAtLoginExcludedUsersKey,
+                              kMTDefaultsAutomaticRevocationExcludedUsersKey,
                               kMTDefaultsPostChangeExecutablePathKey,
                               kMTDefaultsPostChangeActionOnGrantOnlyKey,
                               kMTDefaultsEnforcePrivilegesKey,
@@ -1105,7 +1106,7 @@ OSStatus SecTaskValidateForRequirement(SecTaskRef task, CFStringRef requirement)
 - (void)systemTimeChanged:(NSNotification*)notification
 {
     if ([self userHasAdminPrivileges] &&
-        [_privilegesApp revokePrivilegesOnSystemTimeChange]) {
+        [_privilegesApp revokePrivilegesAfterSystemTimeChange]) {
         
         os_log(OS_LOG_DEFAULT, "SAPCorp: Revoking administrator privileges for user %{public}@ because system time changed", [[self->_privilegesApp currentUser] userName]);
         

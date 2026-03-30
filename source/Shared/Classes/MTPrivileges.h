@@ -197,11 +197,11 @@
 - (void)setRevokePrivilegesAtLogin:(BOOL)revoke;
 
 /*!
- @method        revokePrivilegesOnSystemTimeChange
+ @method        revokePrivilegesAfterSystemTimeChange
  @abstract      Get whether admin privileges should be revoked if system time did change.
  @discussion    Returns YES if admin privileges should be revoked if the system time did change, otherwise returns NO.
  */
-- (BOOL)revokePrivilegesOnSystemTimeChange;
+- (BOOL)revokePrivilegesAfterSystemTimeChange;
 
 /*!
  @method        revokePrivilegesOnScreenLock

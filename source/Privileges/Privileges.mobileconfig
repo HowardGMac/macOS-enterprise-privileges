@@ -308,6 +308,23 @@
                                 <true/>
                                 
                                 <!--
+                                    key:    RevokeAfterTimeChangeExcludedUsers
+                                    value:  an array of strings containing the short names of the users
+                                    
+                                    If RevokePrivilegesAfterSystemTimeChange is set to true, the specified
+                                    users are excluded from privilege revocation after system time did
+                                    change. When used with a client management system that supports
+                                    variables in configuration profiles, variables such as $USERNAME can be
+                                    used here.
+                                -->
+                                <key>RevokeAfterTimeChangeExcludedUsers</key>
+                                <array>
+                                    <string>privileges_user1</string>
+                                    <string>privileges_user2</string>
+                                    <string>privileges_user3</string>
+                                </array>
+                                
+                                <!--
                                     key:    RevokePrivilegesOnScreenLock
                                     value:  a boolean
                                     
@@ -317,6 +334,42 @@
                                 <key>RevokePrivilegesOnScreenLock</key>
                                 <true/>
                                 
+                                <!--
+                                    key:    RevokeOnScreenLockExcludedUsers
+                                    value:  an array of strings containing the short names of the users
+                                    
+                                    If RevokePrivilegesOnScreenLock is set to true, the specified users are
+                                    excluded from privilege revocation on screen lock. When used with a
+                                    client management system that supports variables in configuration
+                                    profiles, variables such as $USERNAME can be used here.
+                                -->
+                                <key>RevokeOnScreenLockExcludedUsers</key>
+                                <array>
+                                    <string>privileges_user1</string>
+                                    <string>privileges_user2</string>
+                                    <string>privileges_user3</string>
+                                </array>
+                                
+                                <!--
+                                    key:    AutomaticRevocationExcludedUsers
+                                    value:  an array of strings containing the short names of the users
+                                    
+                                    The specified users are excluded from any automatic revocation. This key
+                                    is evaluated before the keys RevokeAtLoginExcludedUsers,
+                                    RevokeAfterTimeChangeExcludedUsers, RevokeOnScreenLockExcludedUsers, and
+                                    any other automatic revocation key that may be introduced in the future.
+                                    If a user is listed in the AutomaticRevocationExcludedUsers key, the
+                                    other keys are not evaluated. When used with a client management system
+                                    that supports variables in configuration profiles, variables such as
+                                    $USERNAME can be used here.
+                                -->
+                                <key>AutomaticRevocationExcludedUsers</key>
+                                <array>
+                                    <string>privileges_user1</string>
+                                    <string>privileges_user2</string>
+                                    <string>privileges_user3</string>
+                                </array>
+
                                 <!--
                                     key:    HideOtherWindows
                                     value:  a boolean

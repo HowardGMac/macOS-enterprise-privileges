@@ -282,17 +282,19 @@
     return (remove && ![[self currentUser] isExcludedFromRevokeAtLogin]);
 }
 
-- (BOOL)revokePrivilegesOnSystemTimeChange
+- (BOOL)revokePrivilegesAfterSystemTimeChange
 {
     return ([_userDefaults objectIsForcedForKey:kMTDefaultsRevokeAfterSystemTimeChangeKey] &&
-            [_userDefaults boolForKey:kMTDefaultsRevokeAfterSystemTimeChangeKey]
+            [_userDefaults boolForKey:kMTDefaultsRevokeAfterSystemTimeChangeKey] &&
+            ![[self currentUser] isExcludedFromRevokeAfterSystemTimeChange]
             );
 }
 
 - (BOOL)revokePrivilegesOnScreenLock
 {
     return ([_userDefaults objectIsForcedForKey:kMTDefaultsRevokeOnScreenLockKey] &&
-            [_userDefaults boolForKey:kMTDefaultsRevokeOnScreenLockKey]
+            [_userDefaults boolForKey:kMTDefaultsRevokeOnScreenLockKey] &&
+            ![[self currentUser] isExcludedFromRevokeOnScreenLock]
             );
 }
 

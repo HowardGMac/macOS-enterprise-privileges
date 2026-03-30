@@ -253,9 +253,75 @@
 
 - (BOOL)isExcludedFromRevokeAtLogin
 {
+    BOOL userIsExcluded = [self isExcludedFromAutomaticRevocation];
+    
+    if (!userIsExcluded) {
+        
+        NSArray *excludedUsers = ([_userDefaults objectIsForcedForKey:kMTDefaultsRevokeAtLoginExcludedUsersKey]) ? [_userDefaults arrayForKey:kMTDefaultsRevokeAtLoginExcludedUsersKey] : nil;
+        
+        for (NSString *userName in excludedUsers) {
+            
+            if ([userName isKindOfClass:[NSString class]] &&
+                [userName caseInsensitiveCompare:_userName] == NSOrderedSame) {
+                
+                userIsExcluded = YES;
+                break;
+            }
+        }
+    }
+    
+    return userIsExcluded;
+}
+
+- (BOOL)isExcludedFromRevokeAfterSystemTimeChange
+{
+    BOOL userIsExcluded = [self isExcludedFromAutomaticRevocation];
+    
+    if (!userIsExcluded) {
+        
+        NSArray *excludedUsers = ([_userDefaults objectIsForcedForKey:kMTDefaultsRevokeAfterTimeChangeExcludedUsersKey]) ? [_userDefaults arrayForKey:kMTDefaultsRevokeAfterTimeChangeExcludedUsersKey] : nil;
+        
+        for (NSString *userName in excludedUsers) {
+            
+            if ([userName isKindOfClass:[NSString class]] &&
+                [userName caseInsensitiveCompare:_userName] == NSOrderedSame) {
+                
+                userIsExcluded = YES;
+                break;
+            }
+        }
+    }
+    
+    return userIsExcluded;
+}
+
+- (BOOL)isExcludedFromRevokeOnScreenLock
+{
+    BOOL userIsExcluded = [self isExcludedFromAutomaticRevocation];
+    
+    if (!userIsExcluded) {
+        
+        NSArray *excludedUsers = ([_userDefaults objectIsForcedForKey:kMTDefaultsRevokeOnScreenLockExcludedUsersKey]) ? [_userDefaults arrayForKey:kMTDefaultsRevokeOnScreenLockExcludedUsersKey] : nil;
+        
+        for (NSString *userName in excludedUsers) {
+            
+            if ([userName isKindOfClass:[NSString class]] &&
+                [userName caseInsensitiveCompare:_userName] == NSOrderedSame) {
+                
+                userIsExcluded = YES;
+                break;
+            }
+        }
+    }
+    
+    return userIsExcluded;
+}
+
+- (BOOL)isExcludedFromAutomaticRevocation
+{
     BOOL userIsExcluded = NO;
     
-    NSArray *excludedUsers = ([_userDefaults objectIsForcedForKey:kMTDefaultsRevokeAtLoginExcludedUsersKey]) ? [_userDefaults arrayForKey:kMTDefaultsRevokeAtLoginExcludedUsersKey] : nil;
+    NSArray *excludedUsers = ([_userDefaults objectIsForcedForKey:kMTDefaultsAutomaticRevocationExcludedUsersKey]) ? [_userDefaults arrayForKey:kMTDefaultsAutomaticRevocationExcludedUsersKey] : nil;
     
     for (NSString *userName in excludedUsers) {
 

@@ -118,5 +118,26 @@
  */
 - (BOOL)isExcludedFromRevokeAtLogin;
 
+/*!
+ @method        isExcludedFromRevokeAfterSystemTimeChange
+ @abstract      Get whether the current user is excluded from the automatic privilege removal after system time did change.
+ @discussion    Returns YES if the user is excluded, otherwise returns NO.
+ */
+- (BOOL)isExcludedFromRevokeAfterSystemTimeChange;
+
+/*!
+ @method        isExcludedFromRevokeOnScreenLock
+ @abstract      Get whether the current user is excluded from the automatic privilege removal on screen lock.
+ @discussion    Returns YES if the user is excluded, otherwise returns NO.
+ */
+- (BOOL)isExcludedFromRevokeOnScreenLock;
+
+/*!
+ @method        isExcludedFromAutomaticRevocation
+ @abstract      Get whether the current user is excluded from all automatic privilege removals.
+ @discussion    Returns YES if the user is excluded, otherwise returns NO.
+ */
+- (BOOL)isExcludedFromAutomaticRevocation;
+
 @end
 

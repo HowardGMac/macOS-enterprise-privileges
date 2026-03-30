@@ -188,10 +188,19 @@ OSStatus SecTaskValidateForRequirement(SecTaskRef task, CFStringRef requirement)
                 }
                 
                 success = (grant == [MTIdentity groupMembershipForUser:userName
-                                                                  groupID:kMTAdminGroupID
-                                                                    error:nil
+                                                               groupID:kMTAdminGroupID
+                                                                 error:nil
                                     ]
                            );
+                
+                if (!success) {
+                    
+                    os_log_with_type(OS_LOG_DEFAULT, OS_LOG_TYPE_ERROR, "SAPCorp: Failed to verify group membership");
+                }
+                
+            } else {
+                
+                os_log_with_type(OS_LOG_DEFAULT, OS_LOG_TYPE_ERROR, "SAPCorp: Failed to change group membership");
             }
         }
     }
@@ -208,6 +217,8 @@ OSStatus SecTaskValidateForRequirement(SecTaskRef task, CFStringRef requirement)
     BOOL success = NO;
 
     if (userName) {
+        
+        os_log_t log = os_log_create("corp.sap.privileges.daemon", "privchange");
                 
         success = [self changePrivilegesForUser:userName grantAdminPrivileges:YES];
                 
@@ -216,12 +227,12 @@ OSStatus SecTaskValidateForRequirement(SecTaskRef task, CFStringRef requirement)
             // log the privilege change
             NSString *logMessage = [NSString stringWithFormat:@"SAPCorp: User %@ now has administrator privileges", userName];
             if ([reason length] > 0) { logMessage = [logMessage stringByAppendingFormat:@" for the following reason: \"%@\"", reason]; }
-            os_log(OS_LOG_DEFAULT, "%{public}@", logMessage);
+            os_log(log, "%{public}@", logMessage);
             
         } else {
             
             NSString *logMessage = [NSString stringWithFormat:@"SAPCorp: Failed to change privileges for user %@", userName];
-            os_log_with_type(OS_LOG_DEFAULT, OS_LOG_TYPE_FAULT, "%{public}@", logMessage);
+            os_log_with_type(log, OS_LOG_TYPE_FAULT, "%{public}@", logMessage);
         }
     }
     
@@ -236,6 +247,8 @@ OSStatus SecTaskValidateForRequirement(SecTaskRef task, CFStringRef requirement)
 
     if (userName) {
         
+        os_log_t log = os_log_create("corp.sap.privileges.daemon", "privchange");
+        
         success = [self changePrivilegesForUser:userName grantAdminPrivileges:NO];
                 
         if (success) {
@@ -243,12 +256,12 @@ OSStatus SecTaskValidateForRequirement(SecTaskRef task, CFStringRef requirement)
             // log the privilege change
             NSString *logMessage = [NSString stringWithFormat:@"SAPCorp: User %@ now has standard user privileges", userName];
             if ([reason length] > 0) { logMessage = [logMessage stringByAppendingFormat:@" (%@)", reason]; }
-            os_log(OS_LOG_DEFAULT, "%{public}@", logMessage);
+            os_log(log, "%{public}@", logMessage);
         
         } else {
             
             NSString *logMessage = [NSString stringWithFormat:@"SAPCorp: Failed to change privileges for user %@", userName];
-            os_log_with_type(OS_LOG_DEFAULT, OS_LOG_TYPE_FAULT, "%{public}@", logMessage);
+            os_log_with_type(log, OS_LOG_TYPE_FAULT, "%{public}@", logMessage);
         }
     }
     
