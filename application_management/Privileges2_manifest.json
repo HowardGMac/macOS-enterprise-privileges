@@ -4,7 +4,7 @@
    "title": "Configure Privileges (corp.sap.privileges) with…", 
    "__preferencedomain": "corp.sap.privileges", 
    "__feedback": "https://github.com/SAP/macOS-enterprise-privileges/issues", 
-   "__version": "2.5.2.0", 
+   "__version": "2.5.3.0", 
    "__copyright": "© 2016-2026 SAP SE. All rights reserved.", 
    "type": "object", 
    "options": { 
@@ -126,6 +126,9 @@
             "ReasonPresetList": { 
                "$ref": "#/definitions/ReasonPresetList" 
             }, 
+            "ReasonStrictPresetList": {
+               "$ref": "#/definitions/ReasonStrictPresetList"
+            },
             "RemoteLogging": { 
                "$ref": "#/definitions/RemoteLogging" 
             }, 
@@ -262,6 +265,9 @@
             "ReasonPresetList": { 
                "$ref": "#/definitions/ReasonPresetList" 
             }, 
+            "ReasonStrictPresetList": {
+               "$ref": "#/definitions/ReasonStrictPresetList"
+            },
             "RemoteLogging": { 
                "$ref": "#/definitions/RemoteLogging" 
             }, 
@@ -1323,6 +1329,23 @@
             } 
          ] 
       }, 
+      "ReasonStrictPresetList": {
+         "type": "boolean",
+         "default": false,
+         "title": "Reason Strict Preset List",
+         "description": "When set to true, the ReasonPresetList is used as defined, otherwise an additional entry \"Other…\" is added to the list of presets allowing the users to enter a custom reason for requesting admin rights.",
+         "links": [
+            {
+               "rel": "Official documentation",
+               "href": "https://github.com/SAP/macOS-enterprise-privileges/wiki/Managing-Privileges#ReasonStrictPresetList"
+            }
+         ],
+         "options": {
+            "dependencies": {
+               "ReasonRequired": true
+            }
+         }
+      },
       "RemoteLogging": { 
          "type": "object", 
          "title": "Remote Logging", 
